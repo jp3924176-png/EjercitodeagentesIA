@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Propio Ejército de Agentes de IA — Ebook</title>
+    <meta name="description" content="La guía práctica para crear agentes de IA que trabajen por ti. Sin programar. Entrega inmediata por WhatsApp.">
+    <meta name="theme-color" content="#0B1220">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.add('js');</script>
+
+    <style>
+        /* =========================================================
+           PALETA — azul marino + ámbar
+           ========================================================= */
+        :root {
+            --bg: #0B1220;
+            --bg-2: #0F182B;
+            --bg-3: #0D1626;
+            --surface: #131D33;
+            --surface-2: #1A2745;
+            --surface-hi: #1B2B52;
+            --border: #243352;
+            --border-hi: #2C4175;
+            --border-strong: #3A4C75;
+            --text: #F1F5F9;
+            --text-2: #CBD5E1;
+            --muted: #94A3B8;
+            --faint: #5E6F8F;
+            --accent: #FF8A3D;
+            --accent-hover: #FFA062;
+            --accent-soft: rgba(255,138,61,.14);
+            --on-accent: #0B1220;
+            --dark: #070C17;
+
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'Geist', -apple-system, 'Segoe UI', sans-serif;
+            --mono: 'Geist Mono', ui-monospace, monospace;
+
+            --radius: 14px;
+            --max: 1160px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--sans);
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--text);
+            background: radial-gradient(1200px 600px at 80% -10%, rgba(59,91,170,.28), transparent 60%), var(--bg);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: clip; /* evita scroll horizontal sin romper el header fijo */
+        }
+
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+        a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+        .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+        .eyebrow {
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+        em.accent { font-style: italic; color: var(--accent); }
+
+        /* =========================== BOTONES =========================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 52px;
+            padding: 0 26px;
+            border-radius: 999px;
+            font-family: var(--sans);
+            font-size: 16px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: background .2s, transform .2s, box-shadow .2s, border-color .2s;
+            white-space: nowrap;
+        }
+        .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--on-accent);
+            font-weight: 700;
+            box-shadow: 0 0 0 1px rgba(255,255,255,.15) inset, 0 10px 30px -10px rgba(255,138,61,.55);
+        }
+        .btn-accent:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 34px -8px rgba(255,138,61,.7);
+        }
+
+        .btn-light { background: var(--text); color: var(--bg); }
+        .btn-light:hover { background: #fff; transform: translateY(-1px); }
+
+        .btn-line { background: transparent; color: var(--text); border-color: var(--border); }
+        .btn-line:hover { border-color: var(--text); }
+
+        .btn-sm { min-height: 40px; padding: 0 18px; font-size: 14px; }
+        .btn-block { width: 100%; }
+
+        /* =========================== ANUNCIO =========================== */
+        .announce {
+            background: var(--accent);
+            color: var(--on-accent);
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            padding: 10px 16px;
+        }
+        .announce strong { font-weight: 700; }
+        .announce a { text-decoration: underline; text-underline-offset: 3px; }
+
+        /* =========================== HEADER =========================== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(11,18,32,.82);
+            backdrop-filter: saturate(180%) blur(12px);
+            -webkit-backdrop-filter: saturate(180%) blur(12px);
+            border-bottom: 1px solid transparent;
+            transition: border-color .2s;
+        }
+        header.scrolled { border-bottom-color: var(--border); }
+        .nav {
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; min-width: 0; }
+        .logo-mark {
+            width: 28px; height: 28px;
+            border-radius: 8px;
+            background: var(--surface-2);
+            display: grid; place-items: center;
+            flex-shrink: 0;
+        }
+        .logo-mark span { width: 10px; height: 10px; background: var(--accent); border-radius: 2px; }
+        .nav-links { display: flex; gap: 32px; font-size: 15px; color: var(--text-2); }
+        .nav-links a:hover { color: var(--text); }
+
+        /* =========================== HERO =========================== */
+        .hero { padding: 72px 0 96px; }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 64px;
+            align-items: center;
+        }
+        .hero h1 {
+            font-family: var(--serif);
+            font-weight: 400;
+            font-size: clamp(44px, 6.2vw, 80px);
+            line-height: 1.02;
+            letter-spacing: -0.02em;
+            margin: 20px 0 24px;
+        }
+        .hero-lead { font-size: 19px; color: var(--text-2); max-width: 520px; margin-bottom: 36px; }
+        .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+        .trust { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); }
+        .trust span { display: inline-flex; align-items: center; gap: 7px; }
+        .trust svg { width: 16px; height: 16px; color: var(--accent); }
+
+        .book-stage {
+            position: relative;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            aspect-ratio: 4 / 4.6;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+        }
+        .book-stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 18px 18px;
+            opacity: .7;
+        }
+        .book {
+            position: relative;
+            width: 64%;
+            min-height: 120px;
+            border-radius: 4px 10px 10px 4px;
+            background: var(--surface-2);
+            transform: perspective(1200px) rotateY(-14deg) rotateX(2deg);
+            box-shadow:
+                -2px 0 0 rgba(0,0,0,.08),
+                20px 30px 40px -10px rgba(0,0,0,.5),
+                40px 60px 80px -20px rgba(0,0,0,.4);
+            transition: transform .6s cubic-bezier(.2,.7,.2,1);
+        }
+        .book-stage:hover .book { transform: perspective(1200px) rotateY(-4deg) rotateX(0); }
+        .book img { width: 100%; height: auto; border-radius: 4px 10px 10px 4px; }
+        .book::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 12px;
+            background: linear-gradient(90deg, rgba(0,0,0,.25), rgba(255,255,255,.15), transparent);
+            border-radius: 4px 0 0 4px;
+        }
+        .sticker {
+            position: absolute;
+            top: 28px; right: 28px;
+            width: 96px; height: 96px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--on-accent);
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-family: var(--serif);
+            font-size: 30px;
+            line-height: 1.05;
+            transform: rotate(12deg);
+            box-shadow: 0 10px 24px -8px rgba(255,138,61,.6);
+            z-index: 2;
+        }
+        .sticker small { display: block; font-family: var(--mono); font-size: 10px; margin-bottom: 2px; letter-spacing: .08em; opacity: .85; }
+
+        /* =========================== HERRAMIENTAS =========================== */
+        .tools { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 28px 0; }
+        .tools-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+        .tools-list {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--faint);
+            letter-spacing: -0.01em;
+        }
+
+        /* =========================== SECCIONES =========================== */
+        section { padding: 120px 0; }
+        .section-alt { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .section-alt-2 { background: var(--bg-3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+        .section-head { max-width: 720px; margin-bottom: 64px; }
+        .section-head h2,
+        .toc-side h2,
+        .faq-grid h2 {
+            font-family: var(--serif);
+            font-weight: 400;
+            font-size: clamp(36px, 4.6vw, 56px);
+            line-height: 1.05;
+            letter-spacing: -0.015em;
+            margin-top: 16px;
+        }
+        .section-head p { color: var(--text-2); font-size: 18px; margin-top: 20px; }
+
+        /* ---- Antes / después ---- */
+        .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .compare-col { border-radius: 20px; padding: 36px; border: 1px solid var(--border); background: var(--surface); }
+        .compare-col.after { background: linear-gradient(160deg, var(--surface-hi), #14203C); border-color: var(--border-hi); }
+        .compare-col h3 { font-size: 15px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+        .compare-col h3 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); }
+        .compare-col.after h3 .dot { background: var(--accent); }
+        .compare-col ul { list-style: none; }
+        .compare-col li { padding: 14px 0; border-top: 1px solid var(--border); color: var(--text-2); display: flex; gap: 12px; }
+        .compare-col.after li { border-top-color: var(--border-hi); color: #DCE5F3; }
+        .compare-col li svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; }
+        .compare-col.after li svg { color: var(--accent); }
+
+        /* ---- Índice ---- */
+        .toc-grid { display: grid; grid-template-columns: 340px 1fr; gap: 80px; align-items: start; }
+        .toc-side { position: sticky; top: 110px; }
+        .toc-side h2 { margin-bottom: 20px; }
+        .toc-side p { color: var(--text-2); margin-bottom: 28px; }
+        .toc-meta { display: flex; gap: 28px; margin-bottom: 32px; }
+        .toc-meta strong { display: block; font-family: var(--serif); font-size: 40px; font-weight: 400; line-height: 1; }
+        .toc-meta span { font-size: 13px; color: var(--muted); }
+
+        .toc { list-style: none; border-top: 1px solid var(--border-strong); }
+        .toc li {
+            display: grid;
+            grid-template-columns: 64px 1fr auto;
+            gap: 16px;
+            align-items: baseline;
+            padding: 26px 0;
+            border-bottom: 1px solid var(--border);
+            transition: padding .25s;
+        }
+        .toc li:hover { padding-left: 8px; }
+        .toc .num { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+        .toc h4 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+        .toc p { font-size: 15px; color: var(--muted); }
+        .toc .tag {
+            font-family: var(--mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        /* ---- Qué incluye ---- */
+        .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+        .tile {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+        }
+        .tile.span-4 { grid-column: span 4; }
+        .tile.span-2 { grid-column: span 2; }
+        .tile.accent { background: var(--accent-soft); border-color: rgba(255,138,61,.35); }
+        .tile.highlight { background: linear-gradient(160deg, var(--surface-hi), #14203C); border-color: var(--border-hi); }
+        .tile-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: grid; place-items: center;
+            background: var(--surface-2);
+        }
+        .tile-icon svg { width: 22px; height: 22px; }
+        .tile h3 { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; margin: 28px 0 8px; }
+        .tile.accent h3 { margin-top: 16px; }
+        .tile p { color: var(--text-2); font-size: 15px; }
+        .tile.highlight p { color: #B5C2DA; }
+        .big-number { font-family: var(--serif); font-size: 88px; line-height: .9; color: var(--accent); }
+
+        /* ---- Testimonios ---- */
+        .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .quote {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 32px;
+        }
+        .stars { display: flex; gap: 2px; color: var(--accent); }
+        .stars svg { width: 16px; height: 16px; }
+        .quote blockquote { font-family: var(--serif); font-size: 24px; line-height: 1.25; margin-top: 18px; color: var(--text); }
+        .person { display: flex; align-items: center; gap: 12px; }
+        .avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: grid; place-items: center;
+            font-weight: 600; font-size: 14px;
+            background: var(--surface-2);
+            color: var(--text-2);
+        }
+        .person strong { display: block; font-size: 15px; }
+        .person span { font-size: 13px; color: var(--muted); }
+
+        /* ---- Precio ---- */
+        .pricing { background: radial-gradient(900px 500px at 20% 0%, rgba(59,91,170,.25), transparent 60%), var(--dark); }
+        .pricing-grid { display: grid; grid-template-columns: 1fr 460px; gap: 80px; align-items: center; }
+        .pricing h2 {
+            font-family: var(--serif);
+            font-weight: 400;
+            font-size: clamp(40px, 5vw, 64px);
+            line-height: 1.02;
+            margin: 16px 0 24px;
+        }
+        .pricing-lead { color: var(--text-2); font-size: 18px; max-width: 460px; }
+        .guarantee {
+            margin-top: 40px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            max-width: 460px;
+        }
+        .guarantee svg { width: 28px; height: 28px; color: var(--accent); flex-shrink: 0; }
+        .guarantee strong { display: block; margin-bottom: 2px; }
+        .guarantee span { color: var(--muted); font-size: 15px; }
+
+        .price-card {
+            background: var(--surface);
+            border: 1px solid var(--border-hi);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 40px 80px -30px rgba(0,0,0,.6);
+        }
+        .price-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
+        .pill {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+        .price .now { font-family: var(--serif); font-size: 80px; line-height: 1; letter-spacing: -0.02em; }
+        .price .was { font-size: 20px; color: var(--muted); text-decoration: line-through; }
+        .price-note { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+        .includes { list-style: none; border-top: 1px solid var(--border); margin-bottom: 28px; }
+        .includes li { display: flex; gap: 12px; align-items: flex-start; padding: 13px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+        .includes svg { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+        .secure { text-align: center; font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+        /* ---- FAQ ---- */
+        .faq-grid { display: grid; grid-template-columns: 360px 1fr; gap: 80px; }
+        .faq-grid h2 { margin-bottom: 20px; }
+        .faq-grid .side p { color: var(--text-2); }
+        .faq-grid .side a { color: var(--accent); font-weight: 600; }
+        .faq { border-top: 1px solid var(--border-strong); }
+        .faq details { border-bottom: 1px solid var(--border); }
+        .faq summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 26px 0;
+            font-size: 19px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+        .faq summary::-webkit-details-marker { display: none; }
+        .faq summary .plus {
+            width: 28px; height: 28px; flex-shrink: 0;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: grid; place-items: center;
+            transition: transform .25s, background .25s;
+        }
+        .faq summary .plus svg { width: 14px; height: 14px; }
+        .faq details[open] .plus { transform: rotate(45deg); background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+        .faq details p { padding: 0 48px 26px 0; color: var(--text-2); }
+
+        /* ---- CTA final ---- */
+        .final {
+            text-align: center;
+            padding: 140px 0;
+            border-top: 1px solid var(--border);
+            background: radial-gradient(800px 400px at 50% 100%, rgba(255,138,61,.12), transparent 70%);
+        }
+        .final h2 {
+            font-family: var(--serif);
+            font-weight: 400;
+            font-size: clamp(44px, 6.5vw, 88px);
+            line-height: 1;
+            letter-spacing: -0.02em;
+            max-width: 900px;
+            margin: 20px auto 28px;
+        }
+        .final p { color: var(--text-2); font-size: 19px; margin-bottom: 36px; }
+
+        /* ---- Footer ---- */
+        footer { border-top: 1px solid var(--border); padding: 32px 0; font-size: 14px; color: var(--muted); }
+        .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .foot a:hover { color: var(--text); }
+
+        /* ---- Barra de compra móvil ---- */
+        .mobile-bar {
+            position: fixed;
+            left: 12px; right: 12px; bottom: 12px;
+            z-index: 60;
+            background: var(--surface-2);
+            border: 1px solid var(--border-hi);
+            border-radius: 18px;
+            padding: 10px 10px 10px 18px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,.5);
+            transform: translateY(140%);
+            transition: transform .35s cubic-bezier(.2,.7,.2,1);
+        }
+        .mobile-bar.show { transform: translateY(0); }
+        .mobile-bar .mb-price { font-family: var(--serif); font-size: 26px; line-height: 1; }
+        .mobile-bar .mb-sub { font-size: 12px; color: var(--muted); }
+
+        /* ---- Animación de aparición (solo si JavaScript funciona) ---- */
+        .js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+        .js .reveal.in { opacity: 1; transform: none; }
+
+        /* =========================== RESPONSIVE =========================== */
+        @media (max-width: 960px) {
+            .nav-links { display: none; }
+            .hero { padding: 40px 0 72px; }
+            .hero-grid, .toc-grid, .pricing-grid, .faq-grid { grid-template-columns: 1fr; gap: 48px; }
+            .toc-side { position: static; }
+            .compare, .testimonials { grid-template-columns: 1fr; }
+            .bento { grid-template-columns: 1fr; }
+            .tile.span-4, .tile.span-2 { grid-column: auto; }
+            section { padding: 88px 0; }
+            .mobile-bar { display: flex; }
+            footer { padding-bottom: 100px; }
+        }
+        @media (max-width: 560px) {
+            body { font-size: 16px; }
+            .wrap { padding: 0 18px; }
+            .hero-ctas .btn { width: 100%; white-space: normal; text-align: center; padding: 12px 20px; }
+            .toc li { grid-template-columns: 44px 1fr; }
+            .toc .tag { display: none; }
+            .price-card { padding: 28px; }
+            .price .now { font-size: 64px; }
+            .compare-col, .tile, .quote { padding: 26px; }
+            .tools-list { gap: 22px; font-size: 16px; }
+            .sticker { width: 80px; height: 80px; font-size: 24px; top: 18px; right: 18px; }
+            .faq details p { padding-right: 0; }
+        }
+        @media (max-width: 380px) {
+            .logo-text { display: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            * { transition: none !important; animation: none !important; }
+            .js .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Iconos reutilizables -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89a11.82 11.82 0 0 0-3.48-8.41Z"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M18 6 6 18M6 6l12 12"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M4 19.5V5a2 2 0 0 1 2-2h14v16H6.5A2.5 2.5 0 0 0 4 21.5 2.5 2.5 0 0 0 6.5 24H20"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 0 1-15.5 6.2M3 12A9 9 0 0 1 18.5 5.8M21 4v5h-5M3 20v-5h5"/></symbol>
+    </svg>
+
+    <!-- ANUNCIO -->
+    <div class="announce">
+        <strong>Precio de lanzamiento:</strong> $9.99 en lugar de $19.99 · <a href="#precio">Ver oferta</a>
+    </div>
+
+    <!-- HEADER -->
+    <header id="top">
+        <div class="wrap nav">
+            <a href="#" class="logo" aria-label="Inicio">
+                <span class="logo-mark"><span></span></span>
+                <span class="logo-text">Ejército de Agentes</span>
+            </a>
+            <nav class="nav-links">
+                <a href="#indice">Índice</a>
+                <a href="#incluye">Qué incluye</a>
+                <a href="#opiniones">Opiniones</a>
+                <a href="#faq">Preguntas</a>
+            </nav>
+            <a href="https://wa.me/50663425531?text=Hola%2C%20quiero%20comprar%20el%20ebook%20%22Tu%20propio%20ej%C3%A9rcito%20de%20agentes%20de%20IA%22%20por%20%249.99" target="_blank" rel="noopener noreferrer" class="btn btn-light btn-sm">Comprar · $9.99</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="wrap hero-grid">
+                <div>
+                    <span class="eyebrow">Ebook · Edición 2026</span>
+                    <h1>Pon a la IA a trabajar <em class="accent">mientras duermes.</em></h1>
+                    <p class="hero-lead">
+                        <strong>Tu propio ejército de agentes de IA</strong> es la guía práctica para crear asistentes que responden clientes,
+                        generan contenido y automatizan tareas por ti. Sin saber programar.
+                    </p>
+                    <div class="hero-ctas">
+                        <a href="https://wa.me/50663425531?text=Hola%2C%20quiero%20comprar%20el%20ebook%20%22Tu%20propio%20ej%C3%A9rcito%20de%20agentes%20de%20IA%22%20por%20%249.99" target="_blank" rel="noopener noreferrer" class="btn btn-accent">
+                            <svg aria-hidden="true"><use href="#i-wa"/></svg> Comprar por WhatsApp — $9.99
+                        </a>
+                        <a href="#indice" class="btn btn-line">Ver el índice</a>
+                    </div>
+                    <div class="trust">
+                        <span><svg aria-hidden="true"><use href="#i-check"/></svg> Entrega inmediata</span>
+                        <span><svg aria-hidden="true"><use href="#i-check"/></svg> Garantía de 7 días</span>
+                        <span><svg aria-hidden="true"><use href="#i-check"/></svg> PDF para cualquier dispositivo</span>
+                    </div>
+                </div>
+
+                <div class="book-stage">
+                    <div class="sticker" aria-label="50% de descuento"><div><small>OFERTA</small>−50%</div></div>
+                    <div class="book">
+                        <img src="1.webp" alt="Portada del ebook Tu propio ejército de agentes de IA" width="600" height="800" fetchpriority="high">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HERRAMIENTAS -->
+        <div class="tools">
+            <div class="wrap tools-row">
+                <span class="eyebrow">Herramientas que vas a dominar</span>
+                <div class="tools-list">
+                    <span>ChatGPT</span><span>Claude</span><span>Gemini</span><span>n8n</span><span>Make</span><span>Zapier</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANTES / DESPUÉS -->
+        <section>
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="eyebrow">El problema</span>
+                    <h2>La mayoría usa la IA como un buscador. <em class="accent">Unos pocos la ponen a trabajar.</em></h2>
+                    <p>La diferencia no es saber programar. Es saber delegar a agentes con un rol claro, las herramientas correctas y un proceso definido.</p>
+                </div>
+                <div class="compare reveal">
+                    <div class="compare-col">
+                        <h3><span class="dot"></span>Sin agentes</h3>
+                        <ul>
+                            <li><svg aria-hidden="true"><use href="#i-x"/></svg>Respondes los mismos mensajes de WhatsApp todo el día</li>
+                            <li><svg aria-hidden="true"><use href="#i-x"/></svg>Copias y pegas prompts sueltos en ChatGPT</li>
+                            <li><svg aria-hidden="true"><use href="#i-x"/></svg>Tu negocio se detiene cuando tú te detienes</li>
+                            <li><svg aria-hidden="true"><use href="#i-x"/></svg>Pagas herramientas que no sabes conectar entre sí</li>
+                        </ul>
+                    </div>
+                    <div class="compare-col after">
+                        <h3><span class="dot"></span>Con tu ejército de agentes</h3>
+                        <ul>
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Un agente atiende y califica clientes 24/7</li>
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Cada agente tiene un rol, instrucciones y memoria</li>
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Las tareas repetitivas se hacen solas</li>
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Tus herramientas trabajan juntas como un equipo</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ÍNDICE -->
+        <section id="indice" class="section-alt">
+            <div class="wrap toc-grid">
+                <div class="toc-side reveal">
+                    <span class="eyebrow">Dentro del libro</span>
+                    <h2>Del primer agente a un <em class="accent">equipo completo.</em></h2>
+                    <p>Ocho capítulos ordenados para que avances de cero a tener agentes funcionando en tu negocio.</p>
+                    <div class="toc-meta">
+                        <div><strong>8</strong><span>capítulos</span></div>
+                        <div><strong>20+</strong><span>plantillas</span></div>
+                        <div><strong>0</strong><span>código</span></div>
+                    </div>
+                    <a href="#precio" class="btn btn-light">Conseguir el ebook</a>
+                </div>
+                <ol class="toc">
+                    <li class="reveal"><span class="num">01</span><div><h4>Qué es realmente un agente de IA</h4><p>La diferencia entre un chatbot, un asistente y un agente autónomo.</p></div><span class="tag">Base</span></li>
+                    <li class="reveal"><span class="num">02</span><div><h4>Tu primer agente en 30 minutos</h4><p>Paso a paso, sin escribir una sola línea de código.</p></div><span class="tag">Práctico</span></li>
+                    <li class="reveal"><span class="num">03</span><div><h4>Instrucciones que funcionan</h4><p>Cómo darle a cada agente un rol, un tono y límites claros.</p></div><span class="tag">Base</span></li>
+                    <li class="reveal"><span class="num">04</span><div><h4>Conecta tus herramientas</h4><p>Gmail, Google Sheets, WhatsApp y tu calendario.</p></div><span class="tag">Práctico</span></li>
+                    <li class="reveal"><span class="num">05</span><div><h4>Orquestación: agentes en equipo</h4><p>Haz que varios agentes colaboren y se pasen el trabajo.</p></div><span class="tag">Avanzado</span></li>
+                    <li class="reveal"><span class="num">06</span><div><h4>Automatizaciones listas para copiar</h4><p>Ventas, atención al cliente y creación de contenido.</p></div><span class="tag">Plantillas</span></li>
+                    <li class="reveal"><span class="num">07</span><div><h4>Costos, errores y control</h4><p>Cómo evitar sorpresas y mantener a tus agentes confiables.</p></div><span class="tag">Avanzado</span></li>
+                    <li class="reveal"><span class="num">08</span><div><h4>Convierte esto en un servicio</h4><p>Cómo vender automatizaciones con IA a otros negocios.</p></div><span class="tag">Negocio</span></li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- QUÉ INCLUYE -->
+        <section id="incluye">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Qué incluye</span>
+                    <h2>Todo lo que necesitas para empezar <em class="accent">hoy mismo.</em></h2>
+                </div>
+                <div class="bento">
+                    <div class="tile span-4 highlight reveal">
+                        <div class="tile-icon"><svg aria-hidden="true"><use href="#i-book"/></svg></div>
+                        <div>
+                            <h3>El ebook completo</h3>
+                            <p>Ocho capítulos con explicaciones claras, capturas de pantalla y ejemplos reales que puedes seguir desde tu computadora o celular.</p>
+                        </div>
+                    </div>
+                    <div class="tile span-2 accent reveal">
+                        <span class="big-number">20+</span>
+                        <div>
+                            <h3>Plantillas</h3>
+                            <p>Prompts e instrucciones listas para copiar y pegar.</p>
+                        </div>
+                    </div>
+                    <div class="tile span-2 reveal">
+                        <div class="tile-icon"><svg aria-hidden="true"><use href="#i-copy"/></svg></div>
+                        <div><h3>Flujos listos</h3><p>Automatizaciones que puedes duplicar y adaptar en minutos.</p></div>
+                    </div>
+                    <div class="tile span-2 reveal">
+                        <div class="tile-icon"><svg aria-hidden="true"><use href="#i-refresh"/></svg></div>
+                        <div><h3>Actualizaciones</h3><p>Recibe gratis las nuevas versiones cuando cambien las herramientas.</p></div>
+                    </div>
+                    <div class="tile span-2 reveal">
+                        <div class="tile-icon"><svg aria-hidden="true"><use href="#i-chat"/></svg></div>
+                        <div><h3>Soporte directo</h3><p>¿Te trabaste? Escríbeme por WhatsApp y te ayudo.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIOS -->
+        <section id="opiniones" class="section-alt-2">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <span class="eyebrow">Opiniones</span>
+                    <h2>Lo que dicen quienes <em class="accent">ya lo leyeron.</em></h2>
+                </div>
+                <div class="testimonials">
+                    <figure class="quote reveal">
+                        <div>
+                            <div class="stars" aria-label="5 de 5 estrellas"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></div>
+                            <blockquote>“En una semana tenía un agente respondiendo las consultas de mi tienda. Me devolvió horas de mi día.”</blockquote>
+                        </div>
+                        <figcaption class="person"><span class="avatar">MG</span><div><strong>María G.</strong><span>Tienda en línea</span></div></figcaption>
+                    </figure>
+                    <figure class="quote reveal">
+                        <div>
+                            <div class="stars" aria-label="5 de 5 estrellas"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></div>
+                            <blockquote>“No sé programar y aun así pude seguir todo. Las plantillas solas valen el precio.”</blockquote>
+                        </div>
+                        <figcaption class="person"><span class="avatar">CR</span><div><strong>Carlos R.</strong><span>Freelancer</span></div></figcaption>
+                    </figure>
+                    <figure class="quote reveal">
+                        <div>
+                            <div class="stars" aria-label="5 de 5 estrellas"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></div>
+                            <blockquote>“El capítulo de orquestación me cambió la forma de ver la IA. Ahora vendo este servicio a mis clientes.”</blockquote>
+                        </div>
+                        <figcaption class="person"><span class="avatar">LM</span><div><strong>Lucía M.</strong><span>Consultora de marketing</span></div></figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRECIO -->
+        <section class="pricing" id="precio">
+            <div class="wrap pricing-grid">
+                <div class="reveal">
+                    <span class="eyebrow">Precio de lanzamiento</span>
+                    <h2>Menos de lo que cuesta una cena. <em class="accent">Más útil que un curso.</em></h2>
+                    <p class="pricing-lead">Un solo pago. Sin suscripciones. Recibes el ebook en tu WhatsApp apenas confirmas tu compra.</p>
+                    <div class="guarantee">
+                        <svg aria-hidden="true"><use href="#i-shield"/></svg>
+                        <div>
+                            <strong>Garantía de 7 días</strong>
+                            <span>Si no te sirve, me escribes y te devuelvo tu dinero. Sin preguntas.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="price-card reveal">
+                    <div class="price-top">
+                        <strong>Ebook completo</strong>
+                        <span class="pill">50% de descuento</span>
+                    </div>
+                    <div class="price">
+                        <span class="now">$9.99</span>
+                        <span class="was">$19.99</span>
+                    </div>
+                    <p class="price-note">Pago único · Acceso de por vida</p>
+                    <ul class="includes">
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Ebook completo en PDF (8 capítulos)</li>
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Más de 20 plantillas de prompts</li>
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Flujos de automatización listos</li>
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Actualizaciones gratuitas</li>
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Soporte directo por WhatsApp</li>
+                    </ul>
+                    <a href="https://wa.me/50663425531?text=Hola%2C%20quiero%20comprar%20el%20ebook%20%22Tu%20propio%20ej%C3%A9rcito%20de%20agentes%20de%20IA%22%20por%20%249.99" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-block">
+                        <svg aria-hidden="true"><use href="#i-wa"/></svg> Comprar por WhatsApp
+                    </a>
+                    <p class="secure">Te respondo personalmente y te envío el ebook al instante.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+            <div class="wrap faq-grid">
+                <div class="side reveal">
+                    <span class="eyebrow">Preguntas frecuentes</span>
+                    <h2>¿Tienes dudas?</h2>
+                    <p>Si tu pregunta no está aquí, <a href="https://wa.me/50663425531" target="_blank" rel="noopener noreferrer">escríbeme por WhatsApp</a> y te respondo.</p>
+                </div>
+                <div class="faq reveal">
+                    <details>
+                        <summary>¿Necesito saber programar? <span class="plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+                        <p>No. Todo el libro está pensado para personas sin conocimientos técnicos. Usamos herramientas visuales y cada paso viene explicado con capturas.</p>
+                    </details>
+                    <details>
+                        <summary>¿Cómo recibo el ebook? <span class="plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+                        <p>Haces clic en "Comprar por WhatsApp", coordinamos el pago y te envío el PDF directamente en el chat. Normalmente en pocos minutos.</p>
+                    </details>
+                    <details>
+                        <summary>¿Qué métodos de pago aceptas? <span class="plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+                        <p>SINPE Móvil, transferencia bancaria y PayPal. Te doy los detalles por WhatsApp.</p>
+                    </details>
+                    <details>
+                        <summary>¿Las herramientas que enseñas son gratis? <span class="plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+                        <p>La mayoría tiene un plan gratuito suficiente para empezar. En el capítulo 7 te explico cuándo vale la pena pagar y cuánto cuesta realmente.</p>
+                    </details>
+                    <details>
+                        <summary>¿Y si no me gusta? <span class="plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></span></summary>
+                        <p>Tienes 7 días de garantía. Si sientes que no te sirvió, me escribes y te devuelvo el 100% de tu dinero.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA FINAL -->
+        <section class="final">
+            <div class="wrap reveal">
+                <span class="eyebrow">Empieza hoy</span>
+                <h2>Tu primer agente puede estar funcionando <em class="accent">esta misma noche.</em></h2>
+                <p>$9.99 · Entrega inmediata · Garantía de 7 días</p>
+                <a href="https://wa.me/50663425531?text=Hola%2C%20quiero%20comprar%20el%20ebook%20%22Tu%20propio%20ej%C3%A9rcito%20de%20agentes%20de%20IA%22%20por%20%249.99" target="_blank" rel="noopener noreferrer" class="btn btn-accent">
+                    <svg aria-hidden="true"><use href="#i-wa"/></svg> Quiero mi ebook
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="wrap foot">
+            <span>© <span id="year">2026</span> Tu propio ejército de agentes de IA</span>
+            <a href="https://wa.me/50663425531" target="_blank" rel="noopener noreferrer">Contacto por WhatsApp</a>
+        </div>
+    </footer>
+
+    <!-- BARRA DE COMPRA EN MÓVIL -->
+    <div class="mobile-bar" id="mobileBar">
+        <div>
+            <div class="mb-price">$9.99</div>
+            <div class="mb-sub">Antes $19.99 · Entrega inmediata</div>
+        </div>
+        <a href="https://wa.me/50663425531?text=Hola%2C%20quiero%20comprar%20el%20ebook%20%22Tu%20propio%20ej%C3%A9rcito%20de%20agentes%20de%20IA%22%20por%20%249.99" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-sm">
+            <svg aria-hidden="true"><use href="#i-wa"/></svg> Comprar
+        </a>
+    </div>
+
+    <script>
+        // Año automático en el footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Borde del header al hacer scroll + barra de compra en móvil
+        const header = document.getElementById('top');
+        const bar = document.getElementById('mobileBar');
+        const onScroll = () => {
+            const y = window.scrollY;
+            header.classList.toggle('scrolled', y > 10);
+            bar.classList.toggle('show', y > 600);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // Aparición suave de secciones
+        const revealItems = document.querySelectorAll('.reveal');
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+                });
+            }, { threshold: 0.12 });
+            revealItems.forEach(el => io.observe(el));
+        } else {
+            revealItems.forEach(el => el.classList.add('in'));
+        }
+    </script>
+</body>
+</html>
